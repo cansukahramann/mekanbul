@@ -12,7 +12,7 @@
 # MekanBul REST API Testleri
 
 1. Thunder API
-
+![Thunder API ile Test](./resimler/thunder.png)
 
 2. test.js
 ![test.js ile Test](./resimler/testjs.png)
