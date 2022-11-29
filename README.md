@@ -8,3 +8,11 @@
 
 3. [Bir Mekana Ait Belirli Bir Yorumu Getir](https://mekanbul5.fatmacansukahraman.repl.co/api/mekanlar/637b6582ae6407a68ad08e44/yorumlar/637b6590f096e2bf6a26866e)
 ![Bir Mekana Ait Belirli Bir Yorumu Getir](./resimler/birYorum.png)
+
+# MekanBul REST API Testleri
+
+1. Thunder API
+![Thunder API ile Test](./resimler/thunder.png)
+
+2. test.js
+![test.js ile Test](./resimler/testjs.png)
