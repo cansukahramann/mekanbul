@@ -78,7 +78,7 @@ const mekanEkle = function (req, res) {
         saatler: [
             {
                 gunler: req.body.gunler1,
-                acilis: req.body.acilis1,n
+                acilis: req.body.acilis1,
                 kapanis: req.body.kapanis1,
                 kapali: req.body.kapali1
             }, {
