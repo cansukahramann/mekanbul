@@ -1,82 +1,104 @@
+const { default: axios } = require('axios');
 var express = require('express');
 var router = express.Router();
-
 //anasayfa ismi sabit kalması için const yapılır
 
-const anaSayfa = function (req, res, next) {
-  res.render('anasayfa',
-    {
-      "baslik": 'Anasayfa',
-      "sayfaBaslik": {
-        "siteAd": "MekanBul",
-        "slogan": "Civardaki Mekanları Kesfet"
-      },
-      "mekanlar":[
-        {
-          "ad":"Starbucks",
-          "puan":"3",
-          "adres":"Centrum Garden AVM",
-          "imkanlar":["Kahve","Çay","Kek"],
-          "mesafe":"10km"
-        },
-        {
-          "ad":"Barida Kafe ",
-          "puan":"4",
-          "adres":"SDU Batı Kampüs",
-          "imkanlar":["Kahve","Çay","Kek","Tost"],
-          "mesafe":"3km"
-        }
-        
-      ]
-
-    });
+var apiSecenekleri = {
+  sunucu: "http://localhost:3000",
+  apiYolu: "/api/mekanlar/"
 }
+var mesafeyiFormatla = function (mesafe) {
+  var yeniMesafe, birim;
+  if (mesafe > 1) {
+    yeniMesafe = parseFloat(mesafe).toFixed(1);
+    birim = " km";
+  } else {
+    yeniMesafe = parseInt(mesafe * 1000, 10);
+    birim = " m";
+  }
+
+  return yeniMesafe + birim;
+}
+
+var anasayfaOlustur = function (res, mekanListesi) {
+  var mesaj;
+
+  if (!(mekanListesi instanceof Array)) {
+    mesaj = "API Hatasi: Bir şeyler ters gitti."
+    mekanListesi = [];
+  } else {
+    if (!mekanListesi.length) {
+      mesaj = "Civarda herhangi bir mekan yok.";
+    }
+  }
+
+  res.render("anasayfa", {
+    "baslik": "Anasayfa",
+    "sayfaBaslik": {
+      "siteAd": "Mekanbul",
+      "slogan": "Mekanlari Keşfet"
+    },
+    "mekanlar": mekanListesi,
+    "mesaj": mesaj
+  });
+}
+
+const anaSayfa = function (req, res) {
+  axios.get(apiSecenekleri.sunucu + apiSecenekleri.apiYolu, {
+    params: {
+      "enlem": req.query.enlem,
+      "boylam": req.query.boylam
+    }
+  }).then(function (response) {
+    var i, mekanlar;
+    mekanlar = response.data;
+
+    for (i = 0; i < mekanlar.length; i++) {
+      mekanlar[i].mesafe = mesafeyiFormatla(mekanlar[i].mesafe);
+    }
+    anasayfaOlustur(res, mekanlar);
+  }).catch(function (hata) {
+    anasayfaOlustur(res, hata);
+  });
+}
+var detaySayfasiOlustur = function(res,mekanDetaylari){
+  mekanDetaylari.koordinat={
+    "enlem":mekanDetaylari.koordinat[0],
+    "boylam":mekanDetaylari.koordinat[1]
+  }
+  res.render('mekanbilgisi',
+  {
+    mekanBaslik: mekanDetaylari.ad,
+    mekanDetay: mekanDetaylari
+  });
+}
+var hataGoster = function(res,hata){
+  var mesaj;
+  if (hata.response.status== 404)
+  {
+    mesaj= "404, sayfa bulunamadı!";
+  }else
+  {
+    mesaj=hata.response.status+" hatasi";
+  }
+  res.status(hata.response.status);
+  res.render('error',
+  {
+    "mesaj" : mesaj
+  });
+};
 
 const mekanBilgisi = function (req, res, next) {
-  res.render('mekanbilgisi', 
-  { "baslik": 'Mekan Bilgisi',
-  "mekanBaslik":"Starbucks",
-  "mekanDetay":{
-    "ad":"Starbucks",
-    "puan":"3",
-    "adres":"Centrum Garden AVM",
-    "saatler":[
-      {
-        "gunler":"Pazartesi - Cuma",
-        "acilis":"9:00",
-        "kapanis":"23-00",
-        "kapali":"false"
-      },
-      {
-        "gunler":"Cumartesi - Pazar",
-        "acilis":"08:00",
-        "kapanis":"22:00",
-        "kapali":"false"
-      }
+  axios
+    .get(apiSecenekleri.sunucu+ apiSecenekleri.apiYolu+req.params.mekanid)
+    .then(function(response){
+      detaySayfasiOlustur(res,response.data);
+    })
+    .catch(function(hata){
+      hataGoster(res,hata);
+    });
+};
 
-    ],
-    "imkanlar":["Kahve","Çay","Kek"],
-    "koordinatlar":{
-      "enlem":"37.7",
-      "boylam":"30.5"
-    },
-    "yorumlar":[
-      {
-        "yorumYapan":"Fatma Cansu Kahraman",
-        "yorumMetni":"Pumkin spice lattesi çook güzel aşkolar sevgilimle beraber gittim tavsiye ederim <3",
-        "tarih":"20 Ekim 2022",
-        "puan":"4"
-      },
-      {
-        "yorumYapan":"Fatih Kilit",
-        "yorumMetni":"Sevgilim zorla götürdü berbaaat!",
-        "tarih":"20 Ekim 2022",
-        "puan":"1"
-      }
-    ]
-  } 
-});
-}
 
 const yorumEkle = function (req, res, next) {
   res.render('yorumekle', { title: 'Yorum Ekle' });
@@ -86,6 +108,8 @@ const yorumEkle = function (req, res, next) {
 // anasayfayı dış dünyaya açmak için 
 
 module.exports = {
-  anaSayfa, mekanBilgisi, yorumEkle
+  anaSayfa,
+   mekanBilgisi, 
+   yorumEkle
 }
 

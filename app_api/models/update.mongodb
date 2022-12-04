@@ -1,12 +1,12 @@
 const database = 'mekanbul';
 use(database);
-db.mekanlar.updateOne({"ad":"Starbucks"},
+db.mekanlar.updateOne({"ad":"Gloria Jeans"},
   {$push: {"yorumlar": 
     {
       "_id": ObjectId(),
-      "yorumYapan": "Veli",
-      "puan": 5,
-      "yorumMetni": "Kahveler harika",
+      "yorumYapan": "Cansu",
+      "puan": 2,
+      "yorumMetni": "Eh işte",
       "tarih": new Date()
     }
   }
