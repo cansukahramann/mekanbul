@@ -1,6 +1,4 @@
 const { default: axios } = require('axios');
-var express = require('express');
-var router = express.Router();
 //anasayfa ismi sabit kalması için const yapılır
 
 var apiSecenekleri = {
@@ -41,7 +39,7 @@ var anasayfaOlustur = function (res, mekanListesi) {
     },
     "mekanlar": mekanListesi,
     "mesaj": mesaj
-  });
+  })
 }
 
 const anaSayfa = function (req, res) {
@@ -52,15 +50,15 @@ const anaSayfa = function (req, res) {
     }
   }).then(function (response) {
     var i, mekanlar;
-    mekanlar = response.data;
+    mekanlar = response.data
 
     for (i = 0; i < mekanlar.length; i++) {
-      mekanlar[i].mesafe = mesafeyiFormatla(mekanlar[i].mesafe);
+      mekanlar[i].mesafe = mesafeyiFormatla(mekanlar[i].mesafe)
     }
     anasayfaOlustur(res, mekanlar);
   }).catch(function (hata) {
-    anasayfaOlustur(res, hata);
-  });
+    anasayfaOlustur(res, hata)
+  })
 }
 var detaySayfasiOlustur = function(res,mekanDetaylari){
   mekanDetaylari.koordinat={
@@ -86,8 +84,8 @@ var hataGoster = function(res,hata){
   res.render('error',
   {
     "mesaj" : mesaj
-  });
-};
+  })
+}
 
 const mekanBilgisi = function (req, res, next) {
   axios
@@ -97,7 +95,7 @@ const mekanBilgisi = function (req, res, next) {
     })
     .catch(function(hata){
       hataGoster(res,hata);
-    });
+    })
 };
 
 
