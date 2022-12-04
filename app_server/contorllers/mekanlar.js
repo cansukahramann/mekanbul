@@ -3,7 +3,7 @@ const { default: axios } = require('axios');
 
 var apiSecenekleri = {
   // sunucu: "http://localhost:3000",
-  sunucu: "https://mekanbul.CansuKahraman1.repl.co",
+  sunucu: "https://mekanbul.cansukahraman1.repl.co",
   apiYolu: "/api/mekanlar/"
 }
 var mesafeyiFormatla = function (mesafe) {
