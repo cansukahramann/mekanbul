@@ -2,8 +2,8 @@ const { default: axios } = require('axios');
 //anasayfa ismi sabit kalması için const yapılır
 
 var apiSecenekleri = {
-  // sunucu: "http://localhost:3000",
-  sunucu: "https://mekanbul.fatmacansukahraman.repl.co",
+  sunucu: "http://localhost:3000",
+  // sunucu: "https://mekanbul.fatmacansukahraman.repl.co",
   apiYolu: "/api/mekanlar/"
 }
 var mesafeyiFormatla = function (mesafe) {
