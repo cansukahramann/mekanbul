@@ -4,7 +4,8 @@ var router = express.Router();
 //anasayfa ismi sabit kalması için const yapılır
 
 var apiSecenekleri = {
-  sunucu: "http://localhost:3000",
+  // sunucu: "http://localhost:3000",
+  sunucu: "https://mekanbul.fatmacansukahraman.repl.co",
   apiYolu: "/api/mekanlar/"
 }
 var mesafeyiFormatla = function (mesafe) {
