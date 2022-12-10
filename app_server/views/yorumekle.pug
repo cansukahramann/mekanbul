@@ -3,14 +3,14 @@ extends layout
 block content
   .row.page-header
     .col-lg-12
-      h1 Starbucks'a yorum yap
+      h1= baslik
   .row
     .col-xs-12.col-md-6
-      form.form-horizontal(action= '/mekan', method ='get' , role= 'from' , id='yorumEkle')
+      form.form-horizontal(action = '', method = 'post', role = 'form', id = 'yorumEkle')
         .form-group
           label.col-xs-10.col-sm-2.control-label(for = 'adSoyad') Isim
           .col-xs-12.col-sm-10
-            input#name.form-control(name ='adSoyad')
+            input#name.form-control(name = 'adSoyad')
         .form-group
           label.col-xs-10.col-sm-2.control-label(for = 'puan') Puan
           .col-xs-12.col-sm-2

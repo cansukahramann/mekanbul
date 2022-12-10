@@ -5,14 +5,17 @@ const cevapOlustur = function (res, status, content) {
     res.status(status).json(content);
 }
 
+
 var sonPuanHesapla = function (gelenMekan) {
     var i, yorumSayisi, ortalamaPuan, toplamPuan;
+    console.log("yorumlar" + gelenMekan)
 
     if (gelenMekan.yorumlar && gelenMekan.yorumlar.length > 0) {
         yorumSayisi = gelenMekan.yorumlar.length;
         toplamPuan = 0;
         for (i = 0; i < yorumSayisi; i++) {
             toplamPuan += gelenMekan.yorumlar[i].puan;
+            console.log("toplamPuan" + toplamPuan)
         }
         ortalamaPuan = parseInt(toplamPuan / yorumSayisi, 10);
         gelenMekan.puan = ortalamaPuan;
@@ -24,15 +27,17 @@ var sonPuanHesapla = function (gelenMekan) {
 }
 
 var ortalamaPuanGuncelle = function (mekanid) {
+    console.log("ortalamaguncelle")
     Mekan
         .findById(mekanid)
-        .select("Puan Yorumlar")
+        .select("puan yorumlar")
         .exec(function (hata, mekan) {
             if (!hata)
                 sonPuanHesapla(mekan);
+                console.log("sonpuanhesapla")
         });
 }
-
+  
 var yorumOlustur = function (req, res, gelenMekan) {
     if (!gelenMekan) {
         cevapOlustur(res, 404, {
